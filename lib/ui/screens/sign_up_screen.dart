@@ -35,22 +35,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 const SizedBox(height: 24),
                 TextFormField(
+                  controller: _emailTEController,
                   decoration: InputDecoration(hintText: 'Enter your email'),
                 ), // Already set in materialApp
                 const SizedBox(height: 8),
                 TextFormField(
+                  controller: _firstNameTEController,
                   decoration: InputDecoration(hintText: 'First Name'),
                 ), // Already set in materialApp
                 const SizedBox(height: 8),
                 TextFormField(
+                  controller: _lastNameTEController,
                   decoration: InputDecoration(hintText: 'Last Name'),
                 ), // Already set in materialApp
                 const SizedBox(height: 8),
                 TextFormField(
+                  controller: _mobileTEController,
                   decoration: InputDecoration(hintText: 'Mobile'),
                 ), // Already set in materialApp
                 const SizedBox(height: 8),
                 TextFormField(
+                  controller: _passwordTEController,
                   decoration: InputDecoration(hintText: 'Enter your password'),
                 ),
                 const SizedBox(height: 16),

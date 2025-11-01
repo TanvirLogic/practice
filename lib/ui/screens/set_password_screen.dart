@@ -4,14 +4,16 @@ import 'package:practice/ui/screens/sign_up_screen.dart';
 import 'package:practice/ui/screens/verify_pin_screen.dart';
 import 'package:practice/ui/widgets/screen_background.dart';
 
-class VerifyEmailScreen extends StatefulWidget {
-  const VerifyEmailScreen({super.key});
+import 'login_screen.dart';
+
+class SetPasswordScreen extends StatefulWidget {
+  const SetPasswordScreen({super.key});
 
   @override
-  State<VerifyEmailScreen> createState() => _VerifyEmailScreenState();
+  State<SetPasswordScreen> createState() => _SetPasswordScreenState();
 }
 
-class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
+class _SetPasswordScreenState extends State<SetPasswordScreen> {
   final TextEditingController _emailTEController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -29,12 +31,12 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
               children: [
                 const SizedBox(height: 100),
                 Text(
-                  'Your Email Address',
+                  'Set Your Password',
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: 6),
                 Text(
-                  'A 6 digit pin will be sent to your email address',
+                  'Password Length must be more than 6 digits',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -43,11 +45,15 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 ),
                 const SizedBox(height: 24),
                 TextFormField(
-                  decoration: InputDecoration(hintText: 'Enter your email'),
+                  decoration: InputDecoration(hintText: 'Password'),
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  decoration: InputDecoration(hintText: 'Confirm Password'),
                 ), // Already set in materialApp
                 const SizedBox(height: 8),
                 FilledButton(
-                  onPressed: _onTapVerifyEmailButton,
+                  onPressed: _onTapSetPassButton,
                   child: Icon(Icons.arrow_forward_ios),
                 ),
                 // Text buttons
@@ -81,15 +87,20 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     );
   }
 
-  _onTapVerifyEmailButton() {
-    Navigator.push(
+  _onTapSetPassButton() {
+    Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => VerifyPinScreen()),
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+      (predicate) => false,
     );
   }
 
   void _onTapLogInButton() {
-    Navigator.pop(context);
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+      (predicate) => false,
+    );
   }
 
   @override

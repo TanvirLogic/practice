@@ -1,19 +1,20 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:practice/ui/screens/sign_up_screen.dart';
-import 'package:practice/ui/screens/verify_pin_screen.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:practice/ui/screens/login_screen.dart';
+import 'package:practice/ui/screens/set_password_screen.dart';
+
 import 'package:practice/ui/widgets/screen_background.dart';
 
-class VerifyEmailScreen extends StatefulWidget {
-  const VerifyEmailScreen({super.key});
+class VerifyPinScreen extends StatefulWidget {
+  const VerifyPinScreen({super.key});
 
   @override
-  State<VerifyEmailScreen> createState() => _VerifyEmailScreenState();
+  State<VerifyPinScreen> createState() => _VerifyPinScreenState();
 }
 
-class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
-  final TextEditingController _emailTEController = TextEditingController();
-
+class _VerifyPinScreenState extends State<VerifyPinScreen> {
+  final TextEditingController _pinController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -29,12 +30,12 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
               children: [
                 const SizedBox(height: 100),
                 Text(
-                  'Your Email Address',
+                  'Enter Your OTP',
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: 6),
                 Text(
-                  'A 6 digit pin will be sent to your email address',
+                  'A 6 digit pin has been sent to your email address',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -42,12 +43,27 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                TextFormField(
-                  decoration: InputDecoration(hintText: 'Enter your email'),
-                ), // Already set in materialApp
+                PinCodeTextField(
+                  length: 6,
+                  obscureText: false,
+                  animationType: AnimationType.fade,
+                  keyboardType: TextInputType.number,
+                  pinTheme: PinTheme(
+                    shape: PinCodeFieldShape.box,
+                    borderRadius: BorderRadius.circular(5),
+                    fieldHeight: 50,
+                    fieldWidth: 40,
+                    activeFillColor: Colors.white,
+                  ),
+                  animationDuration: Duration(milliseconds: 300),
+                  backgroundColor: Colors.transparent,
+                  controller: _pinController,
+                  appContext: context,
+                ),
+                // Already set in materialApp
                 const SizedBox(height: 8),
                 FilledButton(
-                  onPressed: _onTapVerifyEmailButton,
+                  onPressed: _onTapPinScreenButton,
                   child: Icon(Icons.arrow_forward_ios),
                 ),
                 // Text buttons
@@ -81,21 +97,24 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     );
   }
 
-  _onTapVerifyEmailButton() {
+  _onTapPinScreenButton() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => VerifyPinScreen()),
+      MaterialPageRoute(builder: (context) => SetPasswordScreen()),
     );
   }
 
   void _onTapLogInButton() {
-    Navigator.pop(context);
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+      (predicate) => false,
+    );
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    _pinController.dispose();
     super.dispose();
-    _emailTEController.dispose();
   }
 }
