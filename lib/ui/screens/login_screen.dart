@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:practice/ui/screens/main_nav_bar_holder_screen.dart';
 import 'package:practice/ui/screens/sign_up_screen.dart';
 import 'package:practice/ui/screens/verify_email_screen.dart';
 import 'package:practice/ui/widgets/screen_background.dart';
@@ -44,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 16),
                 FilledButton(
-                  onPressed: () {},
+                  onPressed: _onTapLoginButton,
                   child: Icon(Icons.arrow_forward_ios),
                 ),
                 // Text buttons
@@ -82,6 +83,14 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  _onTapLoginButton() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => MainNavBarHolderScreen()),
+      (predicate) => false,
     );
   }
 
