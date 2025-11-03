@@ -15,7 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () {},
         child: Icon(Icons.add),
       ),
-      body: Column(children: [SizedBox(height: 10)]),
+      body: Column(children: [SizedBox(height: 10), Card()]),
     );
   }
 }
