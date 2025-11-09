@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../utils/asset_paths.dart';
+import '../../utils/asset_paths.dart';
 import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -15,11 +15,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _moveToNextScreen();
+    _moveToNextScreen(); // This method will call first
   }
 
   Future<void> _moveToNextScreen() async {
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 3)); // Delayed
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => LoginScreen()),
@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { // in that time build will render
     return Scaffold(
       body: Stack(
         children: [

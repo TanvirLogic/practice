@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:practice/ui/screens/sign_up_screen.dart';
-import 'package:practice/ui/screens/verify_pin_screen.dart';
+import 'package:practice/ui/screens/auth_flow/verify_pin_screen.dart';
 import 'package:practice/ui/widgets/screen_background.dart';
 
 class VerifyEmailScreen extends StatefulWidget {

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:practice/ui/screens/cancelled_screen.dart';
-import 'package:practice/ui/screens/completed_screen.dart';
-import 'package:practice/ui/screens/home_screen.dart';
+import 'package:practice/ui/screens/progress_task_screen.dart';
 
 import '../widgets/tm_app_bar.dart';
+import 'cancelled_screen.dart';
+import 'completed_screen.dart';
+import 'new_task_screen.dart';
 
 class MainNavBarHolderScreen extends StatefulWidget {
   const MainNavBarHolderScreen({super.key});
@@ -14,17 +15,26 @@ class MainNavBarHolderScreen extends StatefulWidget {
 
 class _MainNavBarHolderScreenState extends State<MainNavBarHolderScreen> {
   int _selectedIndex = 0;
+
+
   final List<Widget> _screens = [
-    HomeScreen(),
-    CompletedScreen(),
+    NewTaskScreen(),
+    ProgressTaskScreen(),
     CancelledTaskScreen(),
     CompletedScreen(),
   ];
+
   @override
   Widget build(BuildContext context) {
+
+    if (_selectedIndex == 0) {
+      String cheapText = 'New';
+      setState(() {});
+    }
+
     return Scaffold(
       appBar: TMAppBar(),
-
+      body: _screens[_selectedIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: (int index) {
@@ -32,16 +42,15 @@ class _MainNavBarHolderScreenState extends State<MainNavBarHolderScreen> {
           setState(() {});
         },
         destinations: [
-          NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-          NavigationDestination(icon: Icon(Icons.refresh), label: 'Progress'),
-          NavigationDestination(icon: Icon(Icons.cancel), label: 'Cancelled'),
           NavigationDestination(
-            icon: Icon(Icons.done_outline),
-            label: 'Completed',
+            icon: Icon(Icons.new_label_outlined),
+            label: 'New',
           ),
+          NavigationDestination(icon: Icon(Icons.refresh), label: 'Progress'),
+          NavigationDestination(icon: Icon(Icons.close), label: 'Cancelled'),
+          NavigationDestination(icon: Icon(Icons.done), label: 'Completed'),
         ],
       ),
-      body: _screens[_selectedIndex],
     );
   }
 }

@@ -1,7 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:practice/ui/screens/sign_up_screen.dart';
-import 'package:practice/ui/screens/verify_pin_screen.dart';
 import 'package:practice/ui/widgets/screen_background.dart';
 
 import 'login_screen.dart';
@@ -14,7 +12,8 @@ class SetPasswordScreen extends StatefulWidget {
 }
 
 class _SetPasswordScreenState extends State<SetPasswordScreen> {
-  final TextEditingController _emailTEController = TextEditingController();
+  final TextEditingController _firstPassController = TextEditingController();
+  final TextEditingController _secondPassController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -45,10 +44,12 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                 ),
                 const SizedBox(height: 24),
                 TextFormField(
+                  controller: _firstPassController,
                   decoration: InputDecoration(hintText: 'Password'),
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
+                  controller: _secondPassController,
                   decoration: InputDecoration(hintText: 'Confirm Password'),
                 ), // Already set in materialApp
                 const SizedBox(height: 8),
@@ -107,6 +108,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _emailTEController.dispose();
+    _firstPassController.dispose();
+    _secondPassController.dispose();
   }
 }

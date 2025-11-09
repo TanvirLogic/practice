@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:practice/ui/screens/login_screen.dart';
-import 'package:practice/ui/screens/set_password_screen.dart';
+import 'package:practice/ui/screens/auth_flow/login_screen.dart';
+import 'package:practice/ui/screens/auth_flow/set_password_screen.dart';
 
 import 'package:practice/ui/widgets/screen_background.dart';
 

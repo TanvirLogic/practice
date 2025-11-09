@@ -19,7 +19,7 @@ class ScreenBackground extends StatelessWidget {
           fit: BoxFit.cover,
         ),
         SafeArea(
-          child: SingleChildScrollView(child: child),
+          child: SingleChildScrollView(child: child), // This thing is for reusable bg
         ), // Always use SafeArea for child in a Stack
       ],
     );
