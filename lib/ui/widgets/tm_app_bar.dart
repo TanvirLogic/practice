@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:practice/ui/screens/update_profile_screen.dart';
+
+import '../screens/update_profile_screen.dart';
 
 class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const TMAppBar({super.key});
+  const TMAppBar({super.key, this.fromUpdateProfile});
 
-  // final VoidCallback onTapAppBar;
+  final bool? fromUpdateProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -12,20 +13,32 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.green,
       title: GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => UpdateProfileScreen()),
-          );
+          if (fromUpdateProfile ?? false) {
+            return;
+          }
+
+          Navigator.push(context, MaterialPageRoute(
+              builder: (context) => UpdateProfileScreen()));
         },
         child: Row(
+          spacing: 8,
           children: [
             CircleAvatar(),
-            SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Md Tanvir Ahmed', style: TextStyle(fontSize: 18)),
-                Text('bmwthriad2023@gmail.com', style: TextStyle(fontSize: 14)),
+                Text(
+                  'Full name',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(color: Colors.white),
+                ),
+                Text(
+                  'email@gmail.com',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: Colors.white),
+                ),
               ],
             ),
           ],
@@ -36,6 +49,5 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }

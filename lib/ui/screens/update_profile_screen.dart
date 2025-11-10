@@ -1,9 +1,10 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:practice/ui/widgets/screen_background.dart';
-import 'package:practice/ui/widgets/tm_app_bar.dart';
+
+
+import '../widgets/photo_picker_field.dart';
+import '../widgets/screen_background.dart';
+import '../widgets/tm_app_bar.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -13,70 +14,41 @@ class UpdateProfileScreen extends StatefulWidget {
 }
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
-  final TextEditingController _photoTEController = TextEditingController();
   final TextEditingController _emailTEController = TextEditingController();
   final TextEditingController _firstNameTEController = TextEditingController();
   final TextEditingController _lastNameTEController = TextEditingController();
   final TextEditingController _mobileTEController = TextEditingController();
   final TextEditingController _passwordTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final ImagePicker _imagePicker = ImagePicker();
   XFile? _selectedImage;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TMAppBar(),
+      appBar: TMAppBar(
+        fromUpdateProfile: true,
+      ),
       body: ScreenBackground(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 30),
+                  const SizedBox(height: 24),
                   Text(
                     'Update Profile',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextTheme.of(context).titleLarge,
                   ),
-                  SizedBox(height: 20),
-                  Stack(
-                    children: [
-                      TextFormField(
-                        controller: _photoTEController,
-                        decoration: InputDecoration(
-                          hintText: _selectedImage == null
-                              ? 'No photo Selected'
-                              : _selectedImage!.name,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 45,
-                        width: 70,
-                        child: GestureDetector(
-                          onTap: _onTapPhotoPicker,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                bottomLeft: Radius.circular(8),
-                              ),
-                            ),
-
-                            child: Center(
-                              child: Text(
-                                'Photos',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                  const SizedBox(height: 24),
+                  PhotoPickerField(
+                    onTap: _pickImage,
+                    selectedPhoto: _selectedImage,
                   ),
-
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _emailTEController,
@@ -85,29 +57,28 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _firstNameTEController,
-                    decoration: InputDecoration(hintText: 'First Name'),
-                  ), // Already set in materialApp
+                    decoration: InputDecoration(hintText: 'First name'),
+                  ),
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _lastNameTEController,
-                    decoration: InputDecoration(hintText: 'Last Name'),
-                  ), // Already set in materialApp
+                    decoration: InputDecoration(hintText: 'Last name'),
+                  ),
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _mobileTEController,
                     decoration: InputDecoration(hintText: 'Mobile'),
-                  ), // Already set in materialApp
+                  ),
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _passwordTEController,
-                    decoration: InputDecoration(
-                      hintText: 'Enter your password',
-                    ),
+                    obscureText: true,
+                    decoration: InputDecoration(hintText: 'Password'),
                   ),
                   const SizedBox(height: 16),
                   FilledButton(
                     onPressed: () {},
-                    child: Icon(Icons.arrow_forward_ios),
+                    child: Icon(Icons.arrow_circle_right_outlined),
                   ),
                 ],
               ),
@@ -118,23 +89,21 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     );
   }
 
+  Future<void> _pickImage() async {
+    XFile? pickedImage = await _imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      _selectedImage = pickedImage;
+      setState(() {});
+    }
+  }
+
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     _emailTEController.dispose();
     _firstNameTEController.dispose();
     _lastNameTEController.dispose();
     _mobileTEController.dispose();
     _passwordTEController.dispose();
-  }
-
-  Future<void> _onTapPhotoPicker() async {
-    XFile? pickedImage = await _imagePicker.pickImage(
-      source: ImageSource.gallery,
-    );
-    if (pickedImage != null) {
-      _selectedImage = pickedImage;
-    }
+    super.dispose();
   }
 }
