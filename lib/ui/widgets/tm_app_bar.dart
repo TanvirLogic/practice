@@ -4,6 +4,8 @@ import 'package:practice/ui/screens/update_profile_screen.dart';
 class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
   const TMAppBar({super.key});
 
+  // final VoidCallback onTapAppBar;
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
