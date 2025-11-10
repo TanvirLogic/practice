@@ -9,6 +9,8 @@ import '../widgets/tm_app_bar.dart';
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
 
+  static const String name = '/update-profile-screen';
+
   @override
   State<UpdateProfileScreen> createState() => _UpdateProfileScreenState();
 }

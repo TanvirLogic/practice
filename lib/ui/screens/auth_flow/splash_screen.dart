@@ -7,6 +7,8 @@ import 'login_screen.dart';
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
+  static const String name = '/splash-screen';
+
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
@@ -20,9 +22,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _moveToNextScreen() async {
     await Future.delayed(Duration(seconds: 3)); // Delayed
-    Navigator.pushReplacement(
+    Navigator.pushReplacementNamed(
       context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
+      LoginScreen.name,
     );
   }
 

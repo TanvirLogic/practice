@@ -10,6 +10,8 @@ import 'new_task_screen.dart';
 class MainNavBarHolderScreen extends StatefulWidget {
   const MainNavBarHolderScreen({super.key});
 
+  static const String name = '/main-nav-bar-screen';
+
   @override
   State<MainNavBarHolderScreen> createState() => _MainNavBarHolderScreenState();
 }
