@@ -11,27 +11,26 @@ class ApiCaller {
       Uri uri = Uri.parse(url);
 
       _logRequest(url);
-
       Response response = await get(uri);
-
       _logResponse(url, response);
 
       final int statusCode = response.statusCode;
 
-      if (response.statusCode == 200) {
+      if (statusCode == 200) {
+        // SUCCESS
         final decodedData = jsonDecode(response.body);
         return ApiResponse(
           isSuccess: true,
-          responseCode: response.statusCode,
+          responseCode: statusCode,
           responseData: decodedData,
         );
       } else {
+        // FAILED
         final decodedData = jsonDecode(response.body);
         return ApiResponse(
           isSuccess: false,
-          responseCode: response.statusCode,
+          responseCode: statusCode,
           responseData: decodedData,
-          errorMessage: 'Something Wrong',
         );
       }
     } on Exception catch (e) {
@@ -52,27 +51,29 @@ class ApiCaller {
       Uri uri = Uri.parse(url);
 
       _logRequest(url, body: body);
-
-      Response response = await post(uri);
-
+      Response response = await post(uri,
+        headers: {'content-type': 'application/json'},
+        body: jsonEncode(body),
+      );
       _logResponse(url, response);
 
       final int statusCode = response.statusCode;
 
-      if (response.statusCode == 200 || statusCode == 201) {
+      if (statusCode == 200 || statusCode == 201) {
+        // SUCCESS
         final decodedData = jsonDecode(response.body);
         return ApiResponse(
           isSuccess: true,
-          responseCode: response.statusCode,
+          responseCode: statusCode,
           responseData: decodedData,
         );
       } else {
+        // FAILED
         final decodedData = jsonDecode(response.body);
         return ApiResponse(
           isSuccess: false,
-          responseCode: response.statusCode,
+          responseCode: statusCode,
           responseData: decodedData,
-          errorMessage: 'Something Wrong',
         );
       }
     } on Exception catch (e) {
@@ -88,15 +89,15 @@ class ApiCaller {
   static void _logRequest(String url, {Map<String, dynamic>? body}) {
     _logger.i(
       'URL => $url\n'
-      'Body : => ${body}',
+          'Request Body: $body',
     );
   }
 
   static void _logResponse(String url, Response response) {
     _logger.i(
       'URL => $url\n'
-      'Status Code => ${response.statusCode}\n'
-      'Body : ${response.body}',
+          'Status Code: ${response.statusCode}\n'
+          'Body: ${response.body}',
     );
   }
 }
@@ -111,6 +112,6 @@ class ApiResponse {
     required this.isSuccess,
     required this.responseCode,
     required this.responseData,
-    this.errorMessage,
+    this.errorMessage = 'Something went wrong',
   });
 }
