@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../../data/services/api_caller.dart';
 import '../../../data/utils/urls.dart';
+import '../../widgets/centered_progress_indicator.dart';
 import '../../widgets/screen_background.dart';
 import '../../widgets/snack_bar_message.dart';
 
@@ -111,9 +112,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 16),
                   Visibility(
                     visible: _signUpInProgress == false,
-                    replacement: Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    replacement: CenteredProgressIndicator(),
+
+
                     child: FilledButton(
                       onPressed: _onTapSubmitButton,
                       child: Icon(Icons.arrow_circle_right_outlined),
