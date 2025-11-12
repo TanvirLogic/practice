@@ -26,6 +26,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _loginInProgress = false;
 
+  bool _obsecurePass = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,8 +61,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _passwordTEController,
-                    obscureText: true,
-                    decoration: InputDecoration(hintText: 'Password'),
+                    obscureText: _obsecurePass,
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          if (_obsecurePass == true) {
+                            _obsecurePass = false;
+                            setState(() {});
+                          } else if (_obsecurePass == false) {
+                            _obsecurePass = true;
+                            setState(() {});
+                          }
+                        },
+                        icon: Icon(Icons.visibility, color: Colors.grey),
+                      ),
+                    ),
                     validator: (String? value) {
                       if ((value?.length ?? 0) <= 6) {
                         return 'Password should more than 6 letters';
@@ -127,25 +143,27 @@ class _LoginScreenState extends State<LoginScreen> {
   void _onTapForgotPasswordButton() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => VerifyEmailScreen(),
-      ),
+      MaterialPageRoute(builder: (context) => VerifyEmailScreen()),
     );
   }
 
   void _onTapLoginButton() {
     if (_formKey.currentState!.validate()) {
+      // If valid form then
       _login();
     }
   }
 
   Future<void> _login() async {
+    // API call means always future void type
     _loginInProgress = true;
     setState(() {});
+    // Prepare body to request for login
     Map<String, dynamic> requestBody = {
       "email": _emailTEController.text.trim(),
       "password": _passwordTEController.text,
     };
+    // Get the response after post request and check if the response give the isSuccess = true and  response.responseData['status'] == 'success'
     final ApiResponse response = await ApiCaller.postRequest(
       url: Urls.loginUrl,
       body: requestBody,
@@ -154,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushNamedAndRemoveUntil(
         context,
         MainNavBarHolderScreen.name,
-            (predicate) => false,
+        (predicate) => false,
       );
     } else {
       _loginInProgress = false;

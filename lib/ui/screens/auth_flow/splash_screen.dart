@@ -23,14 +23,18 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _moveToNextScreen() async {
     await Future.delayed(Duration(seconds: 3)); // Delayed
     Navigator.pushReplacementNamed(
+      // method -> pushReplacementNamed as we are using named navigation in routes
+      // This thing is for mainly easy navigation process and less more code
       context,
-      LoginScreen.name,
+      LoginScreen.name, // LoginScreen();
     );
   }
 
   @override
-  Widget build(BuildContext context) { // in that time build will render
+  Widget build(BuildContext context) {
+    // in that time build will render
     return Scaffold(
+      // Splash Screen UI , this will remain only 3 seconds
       body: Stack(
         children: [
           SvgPicture.asset(

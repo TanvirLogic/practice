@@ -19,6 +19,7 @@ class TaskManagerApp extends StatelessWidget {
           titleLarge: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
         ),
         inputDecorationTheme: InputDecorationTheme(
+          // This is for TextForField inputDecoration
           fillColor: Colors.white,
           filled: true,
           contentPadding: EdgeInsets.symmetric(horizontal: 16),
@@ -28,6 +29,7 @@ class TaskManagerApp extends StatelessWidget {
           errorBorder: OutlineInputBorder(borderSide: BorderSide.none),
         ),
         filledButtonTheme: FilledButtonThemeData(
+          // This is for filled button global style
           style: FilledButton.styleFrom(
             backgroundColor: Colors.green,
             fixedSize: Size.fromWidth(double.maxFinite),
@@ -40,7 +42,8 @@ class TaskManagerApp extends StatelessWidget {
       ),
       initialRoute: SplashScreen.name,
       routes: {
-        SplashScreen.name: (_) => SplashScreen(),
+        SplashScreen.name: (_) =>
+            SplashScreen(), // This is a string, Can be written like '/splash-screen'
         LoginScreen.name: (_) => LoginScreen(),
         SignUpScreen.name: (_) => SignUpScreen(),
         MainNavBarHolderScreen.name: (_) => MainNavBarHolderScreen(),

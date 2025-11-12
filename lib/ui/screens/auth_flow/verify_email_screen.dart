@@ -1,7 +1,13 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:practice/ui/screens/auth_flow/verify_pin_screen.dart';
+import 'package:practice/ui/widgets/centered_progress_indicator.dart';
 import 'package:practice/ui/widgets/screen_background.dart';
+
+import '../../../data/services/api_caller.dart';
+import '../../../data/utils/urls.dart';
+import '../../widgets/snack_bar_message.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
   const VerifyEmailScreen({super.key});
@@ -15,6 +21,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  bool _inProgress = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,6 +31,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -42,12 +51,24 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 ),
                 const SizedBox(height: 24),
                 TextFormField(
+                  controller: _emailTEController,
                   decoration: InputDecoration(hintText: 'Enter your email'),
+                  validator: (String? value) {
+                    String inputText = value ?? '';
+                    if (EmailValidator.validate(inputText) == false) {
+                      return 'Enter a valid email';
+                    }
+                    return null;
+                  },
                 ), // Already set in materialApp
                 const SizedBox(height: 8),
-                FilledButton(
-                  onPressed: _onTapVerifyEmailButton,
-                  child: Icon(Icons.arrow_forward_ios),
+                Visibility(
+                  visible: _inProgress == false,
+                  replacement: CenteredProgressIndicator(),
+                  child: FilledButton(
+                    onPressed: _onTapVerifyEmailButton,
+                    child: Icon(Icons.arrow_forward_ios),
+                  ),
                 ),
                 // Text buttons
                 const SizedBox(height: 36),
@@ -81,10 +102,34 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   }
 
   _onTapVerifyEmailButton() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => VerifyPinScreen()),
-    );
+    if (_formKey.currentState!.validate()) {
+      _verifyEmail();
+    }
+  }
+
+  Future<void> _verifyEmail() async {
+    // API call means always future void type
+    _inProgress = true;
+    setState(() {});
+
+    String inputEmail = _emailTEController.text.trim();
+    // String url = Urls.verifyEmail + inputEmail; // <-- Old incorrect line
+
+    // **New Corrected Line:** Append email as a query parameter
+    String url = Urls.verifyEmail + inputEmail;
+
+    final ApiResponse response = await ApiCaller.getRequest(url: url);
+
+    if (response.isSuccess && response.responseData['status'] == 'success') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => VerifyPinScreen()),
+      );
+    } else {
+      //_inProgress = false;
+      //setState(() {});
+      showSnackBarMessage(context, response.errorMessage!);
+    }
   }
 
   void _onTapLogInButton() {
