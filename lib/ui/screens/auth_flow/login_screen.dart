@@ -177,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } else {
       _loginInProgress = false;
       setState(() {});
-      showSnackBarMessage(context, response.errorMessage!);
+      showSnackBarMessage(context, "Wrong email or pass");
     }
   }
 

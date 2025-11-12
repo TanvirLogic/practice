@@ -3,11 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:practice/ui/screens/auth_flow/login_screen.dart';
 import 'package:practice/ui/screens/auth_flow/set_password_screen.dart';
+import 'package:practice/ui/widgets/centered_progress_indicator.dart';
 
 import 'package:practice/ui/widgets/screen_background.dart';
 
+import '../../../data/services/api_caller.dart';
+import '../../../data/utils/urls.dart';
+import '../../widgets/snack_bar_message.dart';
+
 class VerifyPinScreen extends StatefulWidget {
-  const VerifyPinScreen({super.key});
+  const VerifyPinScreen({super.key, required this.recoverEmail});
+
+  final String recoverEmail;
 
   @override
   State<VerifyPinScreen> createState() => _VerifyPinScreenState();
@@ -16,6 +23,7 @@ class VerifyPinScreen extends StatefulWidget {
 class _VerifyPinScreenState extends State<VerifyPinScreen> {
   final TextEditingController _pinController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _inProgress = false;
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +70,13 @@ class _VerifyPinScreenState extends State<VerifyPinScreen> {
                 ),
                 // Already set in materialApp
                 const SizedBox(height: 8),
-                FilledButton(
-                  onPressed: _onTapPinScreenButton,
-                  child: Icon(Icons.arrow_forward_ios),
+                Visibility(
+                  visible: _inProgress == false,
+                  replacement: CenteredProgressIndicator(),
+                  child: FilledButton(
+                    onPressed: _onTapPinScreenButton,
+                    child: Icon(Icons.arrow_forward_ios),
+                  ),
                 ),
                 // Text buttons
                 const SizedBox(height: 36),
@@ -98,10 +110,40 @@ class _VerifyPinScreenState extends State<VerifyPinScreen> {
   }
 
   _onTapPinScreenButton() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => SetPasswordScreen()),
-    );
+    if (_formKey.currentState!.validate()) {
+      _verifyPass();
+    }
+  }
+
+  Future<void> _verifyPass() async {
+    // API call means always future void type
+    _inProgress = true;
+    setState(() {});
+
+    String otpReceived = _pinController.text.trim();
+    // String url = Urls.verifyEmail + inputEmail; // <-- Old incorrect line
+
+    // **New Corrected Line:** Append email as a query parameter
+    String otpSendUrl =
+        Urls.verifyPass + widget.recoverEmail + '/' + otpReceived;
+
+    final ApiResponse response = await ApiCaller.getRequest(url: otpSendUrl);
+
+    if (response.isSuccess && response.responseData['status'] == 'success') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SetPasswordScreen(
+            recoverEmail: widget.recoverEmail,
+            recoveredOTP: otpReceived,
+          ),
+        ),
+      );
+    } else {
+      _inProgress = false;
+      setState(() {});
+      showSnackBarMessage(context, response.errorMessage!);
+    }
   }
 
   void _onTapLogInButton() {

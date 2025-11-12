@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:practice/ui/screens/auth_flow/login_screen.dart';
 
 import '../screens/update_profile_screen.dart';
 
@@ -44,7 +45,9 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
           ],
         ),
       ),
-      actions: [IconButton(onPressed: () {}, icon: Icon(Icons.logout))],
+      actions: [IconButton(onPressed: () {
+        Navigator.pushReplacementNamed(context, LoginScreen.name);
+      }, icon: Icon(Icons.logout))],
     );
   }
 

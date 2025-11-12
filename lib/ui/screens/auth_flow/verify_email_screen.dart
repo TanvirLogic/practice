@@ -123,7 +123,10 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     if (response.isSuccess && response.responseData['status'] == 'success') {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => VerifyPinScreen()),
+        MaterialPageRoute(
+          builder: (context) =>
+              VerifyPinScreen(recoverEmail: _emailTEController.text.trim()),
+        ),
       );
     } else {
       //_inProgress = false;

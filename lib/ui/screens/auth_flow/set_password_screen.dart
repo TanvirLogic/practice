@@ -1,11 +1,22 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:practice/ui/widgets/centered_progress_indicator.dart';
 import 'package:practice/ui/widgets/screen_background.dart';
 
+import '../../../data/services/api_caller.dart';
+import '../../../data/utils/urls.dart';
+import '../../widgets/snack_bar_message.dart';
 import 'login_screen.dart';
 
 class SetPasswordScreen extends StatefulWidget {
-  const SetPasswordScreen({super.key});
+  const SetPasswordScreen({
+    super.key,
+    required this.recoverEmail,
+    required this.recoveredOTP,
+  });
+
+  final String recoverEmail;
+  final String recoveredOTP;
 
   @override
   State<SetPasswordScreen> createState() => _SetPasswordScreenState();
@@ -16,6 +27,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   final TextEditingController _secondPassController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _loginInProgress = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,16 +58,32 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                 TextFormField(
                   controller: _firstPassController,
                   decoration: InputDecoration(hintText: 'Password'),
+                  validator: (String? value) {
+                    if ((value?.length ?? 0) <= 6) {
+                      return 'Enter a password more than 6 letters';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
                   controller: _secondPassController,
                   decoration: InputDecoration(hintText: 'Confirm Password'),
+                  validator: (String? value) {
+                    if ((value?.length ?? 0) <= 6) {
+                      return 'Enter a password more than 6 letters';
+                    }
+                    return null;
+                  },
                 ), // Already set in materialApp
                 const SizedBox(height: 8),
-                FilledButton(
-                  onPressed: _onTapSetPassButton,
-                  child: Icon(Icons.arrow_forward_ios),
+                Visibility(
+                  visible: _loginInProgress == false,
+                  replacement: CenteredProgressIndicator(),
+                  child: FilledButton(
+                    onPressed: _onTapSetPassButton,
+                    child: Icon(Icons.arrow_forward_ios),
+                  ),
                 ),
                 // Text buttons
                 const SizedBox(height: 36),
@@ -89,11 +117,38 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   }
 
   _onTapSetPassButton() {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
-      (predicate) => false,
+    if (_formKey.currentState!.validate()) {
+      // If valid form then
+      _login();
+    }
+  }
+
+  Future<void> _login() async {
+    // API call means always future void type
+    _loginInProgress = true;
+    setState(() {});
+    // Prepare body to request for login
+    Map<String, dynamic> requestBody = {
+      "email": widget.recoverEmail,
+      "OTP": widget.recoveredOTP,
+      "password": _firstPassController.text.trim(),
+    };
+    // Get the response after post request and check if the response give the isSuccess = true and  response.responseData['status'] == 'success'
+    final ApiResponse response = await ApiCaller.postRequest(
+      url: Urls.resetPassUrl,
+      body: requestBody,
     );
+    if (response.isSuccess && response.responseData['status'] == 'success') {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        LoginScreen.name,
+        (predicate) => false,
+      );
+    } else {
+      _loginInProgress = false;
+      setState(() {});
+      showSnackBarMessage(context, response.errorMessage!);
+    }
   }
 
   void _onTapLogInButton() {
