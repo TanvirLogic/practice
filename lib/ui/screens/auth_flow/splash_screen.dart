@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:practice/ui/controllers/auth_controller.dart';
+import 'package:practice/ui/screens/main_nav_bar_holder_screen.dart';
 
 import '../../utils/asset_paths.dart';
 import 'login_screen.dart';
@@ -22,12 +24,24 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _moveToNextScreen() async {
     await Future.delayed(Duration(seconds: 3)); // Delayed
-    Navigator.pushReplacementNamed(
-      // method -> pushReplacementNamed as we are using named navigation in routes
-      // This thing is for mainly easy navigation process and less more code
-      context,
-      LoginScreen.name, // LoginScreen();
-    );
+
+    final bool isLoggedin = await AuthController.isUserAlreadyLoggedIn();
+    if (isLoggedin) {
+      await AuthController.getUserData();
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        MainNavBarHolderScreen.name,
+        (predicate) => false,
+      );
+    } else {
+      Navigator.pushNamedAndRemoveUntil(
+        // method -> pushReplacementNamed as we are using named navigation in routes
+        // This thing is for mainly easy navigation process and less more code
+        context,
+        LoginScreen.name,
+        (predicate) => false, // LoginScreen();
+      );
+    }
   }
 
   @override

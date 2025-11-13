@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:practice/ui/controllers/auth_controller.dart';
 import 'package:practice/ui/screens/auth_flow/login_screen.dart';
 
 import '../screens/update_profile_screen.dart';
@@ -18,8 +19,10 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
             return;
           }
 
-          Navigator.push(context, MaterialPageRoute(
-              builder: (context) => UpdateProfileScreen()));
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => UpdateProfileScreen()),
+          );
         },
         child: Row(
           spacing: 8,
@@ -45,9 +48,15 @@ class TMAppBar extends StatelessWidget implements PreferredSizeWidget {
           ],
         ),
       ),
-      actions: [IconButton(onPressed: () {
-        Navigator.pushReplacementNamed(context, LoginScreen.name);
-      }, icon: Icon(Icons.logout))],
+      actions: [
+        IconButton(
+          onPressed: () {
+            AuthController.removeCacheStorgae();
+            Navigator.pushReplacementNamed(context, LoginScreen.name);
+          },
+          icon: Icon(Icons.logout),
+        ),
+      ],
     );
   }
 
